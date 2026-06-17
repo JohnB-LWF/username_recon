@@ -237,6 +237,11 @@ def check_username(username):
 
     for site, site_config in SITES.items():
         profile_url = site_config["url"].format(username)
+        display_url = (
+            f"https://www.instagram.com/{username}"
+            if site == "Instagram"
+            else profile_url
+        )
         try:
             if site == "Reddit":
                 response = get_reddit_response(username)
@@ -254,7 +259,7 @@ def check_username(username):
             is_found = SITE_CHECKERS[site](response, username)
 
             if is_found is True:
-                type_out(f"{Fore.GREEN}[FOUND]{Style.RESET_ALL} {site}: {profile_url}", \
+                type_out(f"{Fore.GREEN}[FOUND]{Style.RESET_ALL} {site}: {display_url}", \
                           delay=0.01)
             elif is_found is False or response.status_code == 404:
                 type_out(f"{Fore.RED}[----]{Style.RESET_ALL} {site}: Not found", delay=0.01)

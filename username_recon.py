@@ -13,6 +13,7 @@ import json
 import time
 import random
 from colorama import Fore, Style, init
+from curl_cffi import requests as curl_requests
 
 # Initialize color handling before any colored output is emitted.
 init()
@@ -31,7 +32,13 @@ INSTAGRAM_HEADERS = {
     "Accept": "application/json",
 }
 
-FSOCIETY_BANNER = r"""
+REDDIT_HEADERS = {
+    **REQUEST_HEADERS,
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
+MrRobot_BANNER = r"""
   ▄█▀██▀█▄    ░█▀▀▀█░        ░█▀▀▀█░    ░█▀▀▀█░    ░█▀▀▀█▄    ░█▀▀▀█░    █▒░███  
 ▒ ░█ ██ █░ ▒▒ ▒█ ▒ █▒ ▒    ▒ ▒█ ▒ █▒ ▒▒ ▒█ ▒ █▒ ▒▒ ▒█ ░ █▒ ▒▒ ▒█ ▒ █▒ ▒▒▄▄ ▒█ ▄▄▒
 █ ▒█ ██ █▒ ██ ▓█ ▓ █▓ █    █ ▓█ ▓ █▓ ██ ▓█ █ █▓ ██ ▓█ ▀ █▓ ██ ▓█ █ █▓ ████ ▓█ ███
@@ -91,7 +98,7 @@ def type_out(text, delay=0.02):
 
     print()
 
-type_out(Fore.RED + FSOCIETY_BANNER + Style.RESET_ALL, delay=0.0008)
+type_out(Fore.RED + MrRobot_BANNER + Style.RESET_ALL, delay=0.0008)
 
 SITES = {
     "GitHub": {
@@ -99,7 +106,7 @@ SITES = {
         "headers": REQUEST_HEADERS,
     },
     "Reddit": {
-        "url": "https://www.reddit.com/user/{}/about.json",
+        "url": "https://www.reddit.com/user/{}/",
         "headers": REQUEST_HEADERS,
     },
     "Twitter": {
@@ -125,15 +132,12 @@ def is_reddit_profile_found(response, username):
     if response.status_code != 200:
         return None
 
-    try:
-        payload = response.json()
-    except ValueError:
+    text = response.text.lower()
+    if "please wait for verification" in text:
         return None
 
-    return (
-        payload.get("kind") == "t2"
-        and payload.get("data", {}).get("name", "").lower() == username.lower()
-    )
+    username_marker = f"u/{username.lower()}"
+    return username_marker in text or ("followers" in text and "karma" in text)
 
 
 def is_twitter_profile_found(response, username):
@@ -191,6 +195,41 @@ SITE_CHECKERS = {
     "TikTok": is_tiktok_profile_found,
 }
 
+
+def get_reddit_response(username):
+    profile_url = SITES["Reddit"]["url"].format(username)
+    session = curl_requests.Session()
+
+    challenge_response = session.get(
+        profile_url,
+        timeout=5,
+        headers=REDDIT_HEADERS,
+        impersonate="chrome146",
+    )
+
+    if challenge_response.status_code != 200:
+        return challenge_response
+
+    challenge_text = challenge_response.text
+    token_match = re.search(r'name="token" value="([^"]+)"', challenge_text)
+    solution_match = re.search(r'\("([0-9a-f]+)"\)', challenge_text)
+
+    if not token_match or not solution_match:
+        return None
+
+    return session.get(
+        profile_url,
+        params={
+            "solution": solution_match.group(1) * 2,
+            "js_challenge": "1",
+            "token": token_match.group(1),
+            "jsc_orig_r": "",
+        },
+        timeout=5,
+        headers=REDDIT_HEADERS,
+        impersonate="chrome146",
+    )
+
 def check_username(username):
     decrypt_animation("Decrypting system modules", duration=3)
     type_out(f"\n[+] Starting OSINT scan for: {username}\n", delay=0.01)
@@ -199,11 +238,18 @@ def check_username(username):
     for site, site_config in SITES.items():
         profile_url = site_config["url"].format(username)
         try:
-            response = requests.get(
-                profile_url,
-                timeout=5,
-                headers=site_config["headers"],
-            )
+            if site == "Reddit":
+                response = get_reddit_response(username)
+            else:
+                response = requests.get(
+                    profile_url,
+                    timeout=5,
+                    headers=site_config["headers"],
+                )
+
+            if response is None:
+                type_out(f"{Fore.RED}[ERR!]{Style.RESET_ALL} {site}: Connection error", delay=0.01)
+                continue
 
             is_found = SITE_CHECKERS[site](response, username)
 

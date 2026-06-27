@@ -4,6 +4,21 @@
 
 A small, flashy Python script inspired by the show Mr. Robot, with some ASCII art and animations for a fun cinema-themed hacking experience!
 
+```
+  ▄█▀██▀█▄    ░█▀▀▀█░        ░█▀▀▀█░    ░█▀▀▀█░    ░█▀▀▀█▄    ░█▀▀▀█░    █▒░███  
+▒ ░█ ██ █░ ▒▒ ▒█ ▒ █▒ ▒    ▒ ▒█ ▒ █▒ ▒▒ ▒█ ▒ █▒ ▒▒ ▒█ ░ █▒ ▒▒ ▒█ ▒ █▒ ▒▒▄▄ ▒█ ▄▄▒
+█ ▒█ ██ █▒ ██ ▓█ ▓ █▓ █    █ ▓█ ▓ █▓ ██ ▓█ █ █▓ ██ ▓█ ▀ █▓ ██ ▓█ █ █▓ ████ ▓█ ███
+░ ▓█ ██ █▓ ░░ ██ ▀ ██ ░    ░ ██ ▀ ██ ░░ ██ ░ ██ ░░ ██████▀ ░░ ██ ░ ██ ░░░░ ██ ░░░
+▒ ██ ██ ██ ▒▒ ██████  ▒    ▒ ██████  ▒▒ ██ ▒ ██ ▒▒ ██ ▄ ██ ▒▒ ██ ▒ ██ ▒▒▒░ ██ ░▒▒
+▓ ██ ██ ██ ▓▓ ██ ▄ ██ ▓    ▓ ██ ▄ ██ ▓▓ ██ ▓ ██ ▓▓ ██ ▓ █▓ ▓▓ ██ ▓ ██ ▓▓▓▒ ██ ▒▓▓
+▒ ▓█ █▓ █▓ ▒▒ ▓█ ▒ █▓ ▒    ▒ ▓█ ▒ █▓ ▒▒ ▓█ ▒ █▓ ▒▒ ▓█ ▒ █▒ ▒▒ ▓█ ▒ █▓ ▒▒▒░ ▓█ ░▒▒
+░ ▒█ █▒ █▒ ░░ ▒█ ░ █▒ ░    ░ ▒█ ░ █▒ ░░ ▒█ ░ █▒ ░░ ▒█ ░ █░ ░░ ▒█ ░ █▒ ░░░░ ▒█ ░░░
+▀ ░█ █░ █░ ▀▀ ░█ ▀ █░ ▀    ▀ ░█ ▀ █░ ▀▀ ░█▄▄▄█░ ▀▀ ░█▄▄▄█▀ ▀▀ ░█▄▄▄█░ ▀▀▀▀ ░█ ▀▀▀
+╭─╴╭─╮╭┬╮╭─╮╷ ╷╶┬╴╭─╴╭─╮   ╭─╮╭─╴╭─╮╭─╮╷╭─╮   ╷ ╷╷╶┬╴╷ ╷   ╭─╮   ╭─╮╭┬╮╷╷  ╭─╴
+│  │ ││││├─╯│ │ │ ├╴ ├┬╯   ├┬╯├╴ ├─╯├─┤│├┬╯   │╷││ │ ├─┤   ├─┤   ╰─╮│││││  ├╴ 
+╰─╴╰─╯╵ ╵╵  ╰─╯ ╵ ╰─╴╵╰╴   ╵╰╴╰─╴╵  ╵ ╵╵╵╰╴   ╰┴╯╵ ╵ ╵ ╵   ╵ ╵   ╰─╯╵ ╵╵╰─╴╰─╴
+```
+
 This script is a simple OSINT (open-source intelligence) tool for checking whether a username appears on multiple social media platforms. Run it with a username and it will check whether an account exists under the same name on the supported sites.
 
 ## Passive OSINT Tool

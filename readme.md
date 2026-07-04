@@ -22,6 +22,7 @@ Just a small, flashy Python script inspired by the show Mr. Robot, with some ASC
 This script is a simple OSINT (open-source intelligence) tool for checking whether a username appears on multiple social media platforms. Run it with a username and it will check whether an account exists under the same name on the supported sites.
 
 [Video Demo](https://www.youtube.com/watch?v=P4IYYiu8mPI)
+
 [Read more on my blog](https://johnbelcher.dev/blog/entries/username-recon-python-script.html)
 
 ## Passive OSINT Tool
